@@ -20,3 +20,10 @@ if (NOT TARGET solanaceae_plugin)
 	FetchContent_MakeAvailable(solanaceae_plugin)
 endif()
 
+if (NOT TARGET WinToast)
+	FetchContent_Declare(WinToast_ext
+		GIT_REPOSITORY https://github.com/mohabouje/WinToast.git
+		GIT_TAG master
+	)
+	FetchContent_MakeAvailable(WinToast_ext)
+endif()

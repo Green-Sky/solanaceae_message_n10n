@@ -24,3 +24,6 @@ CMakeCache.txt
 
 *.tox
 imgui.ini
+/out
+CMakePresets.json
+CMakeUserPresets.json
