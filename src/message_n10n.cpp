@@ -21,6 +21,8 @@ MessageN10n::~MessageN10n(void) {
 }
 
 bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
+	std::cout << "message constructed called\n";
+
 	/*
 	if (!e.e.all_of<Message::Components::MessageText>()) {
 		return false;
@@ -42,10 +44,12 @@ bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 
 void MessageN10n::toastActivated(void) const {
 	// action
+	std::cout << "action called\n";
 }
 
 void MessageN10n::toastActivated(int actionIndex) const {
 	// action
+	std::cout << "action called\n";
 }
 
 void MessageN10n::toastDismissed(WinToastDismissalReason) const {
