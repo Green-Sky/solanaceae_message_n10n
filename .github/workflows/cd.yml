@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 env:
-  BUILD_TYPE: Release
+  BUILD_TYPE: RelWithDebInfo
   BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
 
 jobs:
@@ -55,7 +55,7 @@ jobs:
   windows:
     timeout-minutes: 15
 
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
     - uses: actions/checkout@v4
