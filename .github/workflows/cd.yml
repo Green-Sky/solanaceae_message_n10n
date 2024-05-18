@@ -98,8 +98,8 @@ jobs:
           ${{github.workspace}}/${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-msvc-x86_64.zip
 
   release:
-    if: false
-    #if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) }}
+    #if: false
+    if: ${{ ( github.event_name == 'push' && github.ref == 'refs/heads/master' ) }}
 
     runs-on: ubuntu-latest
 
