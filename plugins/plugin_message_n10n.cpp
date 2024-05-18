@@ -1,5 +1,8 @@
 #include <solanaceae/plugin/solana_plugin_v1.h>
 
+#include <entt/entt.hpp>
+#include <entt/fwd.hpp>
+
 #include "message_n10n.hpp"
 
 #include <iostream>

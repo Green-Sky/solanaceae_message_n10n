@@ -9,3 +9,8 @@ target_link_libraries(plugin_message_n10n PUBLIC
 	solanaceae_message_n10n
 )
 
+# probably not enough
+target_compile_definitions(plugin_message_n10n PUBLIC ENTT_API_IMPORT)
+
+set_target_properties(plugin_message_n10n PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
