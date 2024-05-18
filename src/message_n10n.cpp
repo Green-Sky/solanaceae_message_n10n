@@ -1,6 +1,7 @@
 #include "./message_n10n.hpp"
 
 #include <solanaceae/message3/components.hpp>
+#include <solanaceae/contact/components.hpp>
 
 #include <wintoastlib.h>
 
@@ -29,7 +30,7 @@ class OurHandler : public WinToastLib::IWinToastHandler {
 };
 
 
-MessageN10n::MessageN10n(RegistryMessageModel& rmm) : _rmm(rmm) {
+MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModel& rmm) : _cr(cr), _rmm(rmm) {
 	// Register WinToast App User Model
 	WinToastLib::WinToast::instance()->setAppName(L"Tomato");
 	const auto aumi = WinToastLib::WinToast::configureAUMI(L"green", L"solanaceae", L"solanaceae_message_n10n", L"20240517");
@@ -49,12 +50,31 @@ MessageN10n::~MessageN10n(void) {
 bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 	std::cout << "message constructed called\n";
 
-	if (!e.e.all_of<Message::Components::MessageText>()) {
+	if (!e.e.all_of<
+		Message::Components::MessageText,
+		Message::Components::ContactFrom,
+		Message::Components::ContactTo
+	>()) {
 		return false;
 	}
 
+	const auto sender_c = e.e.get<Message::Components::ContactFrom>().c;
+
+	if (_cr.all_of<Contact::Components::TagSelfStrong>(sender_c)) {
+		return false;
+	}
+
+	std::string title {
+		_cr.get<Contact::Components::Name>(sender_c).name
+	};
+
 	auto templ = WinToastLib::WinToastTemplate(WinToastLib::WinToastTemplate::Text02);
-	templ.setTextField(L"title", WinToastLib::WinToastTemplate::FirstLine);
+	templ.setTextField(
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
+			title
+		),
+		WinToastLib::WinToastTemplate::FirstLine
+	);
 	templ.setTextField(
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
 			e.e.get<Message::Components::MessageText>().text
