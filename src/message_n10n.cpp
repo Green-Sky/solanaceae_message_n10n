@@ -2,6 +2,32 @@
 
 #include <solanaceae/message3/components.hpp>
 
+#include <wintoastlib.h>
+
+#include <locale>
+#include <codecvt>
+
+class OurHandler : public WinToastLib::IWinToastHandler {
+	public:
+		virtual ~OurHandler(void) {
+		}
+
+	protected: // wintoast
+		void toastActivated(void) const override {
+			std::cout << "action called\n";
+		}
+
+		void toastActivated(int actionIndex) const override {
+			std::cout << "action called\n";
+		}
+
+		void toastDismissed(WinToastDismissalReason state) const override {
+		}
+
+		void toastFailed(void) const override {
+		}
+};
+
 
 MessageN10n::MessageN10n(RegistryMessageModel& rmm) : _rmm(rmm) {
 	// Register WinToast App User Model
@@ -23,37 +49,24 @@ MessageN10n::~MessageN10n(void) {
 bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 	std::cout << "message constructed called\n";
 
-	/*
 	if (!e.e.all_of<Message::Components::MessageText>()) {
 		return false;
 	}
-	*/
 
 	auto templ = WinToastLib::WinToastTemplate(WinToastLib::WinToastTemplate::Text02);
 	templ.setTextField(L"title", WinToastLib::WinToastTemplate::FirstLine);
-	templ.setTextField(L"subtitle", WinToastLib::WinToastTemplate::SecondLine);
+	templ.setTextField(
+		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
+			e.e.get<Message::Components::MessageText>().text
+		),
+		WinToastLib::WinToastTemplate::SecondLine
+	);
 
 	WinToastLib::WinToast::WinToastError error;
-	const auto toast_id = WinToastLib::WinToast::instance()->showToast(templ, this, &error);
+	const auto toast_id = WinToastLib::WinToast::instance()->showToast(templ, new OurHandler, &error);
 	if (toast_id < 0) {
 		std::wcout << L"Error: Could not launch your toast notification! " << error << std::endl;
 	}
 
 	return false;
-}
-
-void MessageN10n::toastActivated(void) const {
-	// action
-	std::cout << "action called\n";
-}
-
-void MessageN10n::toastActivated(int actionIndex) const {
-	// action
-	std::cout << "action called\n";
-}
-
-void MessageN10n::toastDismissed(WinToastDismissalReason) const {
-}
-
-void MessageN10n::toastFailed(void) const {
 }
