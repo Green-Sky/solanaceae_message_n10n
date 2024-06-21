@@ -10,7 +10,7 @@
 
 class OurHandler : public WinToastLib::IWinToastHandler {
 	public:
-		virtual ~OurHandler(void) {
+		virtual ~OurHandler(void) override {
 		}
 
 	protected: // wintoast
@@ -58,15 +58,29 @@ bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 		return false;
 	}
 
+	const auto& text = e.e.get<Message::Components::MessageText>().text;
+	if (text.empty()) {
+		return false;
+	}
+
 	const auto sender_c = e.e.get<Message::Components::ContactFrom>().c;
 
 	if (_cr.all_of<Contact::Components::TagSelfStrong>(sender_c)) {
+		return false;
+	}
+	if (!_cr.all_of<
+		Contact::Components::Name
+	>(sender_c)) {
 		return false;
 	}
 
 	std::string title {
 		_cr.get<Contact::Components::Name>(sender_c).name
 	};
+
+	if (title.empty()) {
+		return false;
+	}
 
 	auto templ = WinToastLib::WinToastTemplate(WinToastLib::WinToastTemplate::Text02);
 	templ.setTextField(
@@ -77,7 +91,7 @@ bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 	);
 	templ.setTextField(
 		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
-			e.e.get<Message::Components::MessageText>().text
+			text
 		),
 		WinToastLib::WinToastTemplate::SecondLine
 	);
