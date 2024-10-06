@@ -30,7 +30,7 @@ class OurHandler : public WinToastLib::IWinToastHandler {
 };
 
 
-MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModel& rmm) : _cr(cr), _rmm(rmm) {
+MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm) : _cr(cr), _rmm(rmm) {
 	// Register WinToast App User Model
 	WinToastLib::WinToast::instance()->setAppName(L"Tomato");
 	const auto aumi = WinToastLib::WinToast::configureAUMI(L"green", L"solanaceae", L"solanaceae_message_n10n", L"20240517");

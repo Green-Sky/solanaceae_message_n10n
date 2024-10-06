@@ -4,10 +4,10 @@
 
 class MessageN10n : public RegistryMessageModelEventI {
 	Contact3Registry& _cr;
-	RegistryMessageModel& _rmm;
+	RegistryMessageModelI& _rmm;
 
 	public:
-		MessageN10n(Contact3Registry& cr, RegistryMessageModel& rmm);
+		MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm);
 		virtual ~MessageN10n(void);
 
 	protected: // rmm
