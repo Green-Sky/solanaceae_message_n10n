@@ -30,7 +30,7 @@ class OurHandler : public WinToastLib::IWinToastHandler {
 };
 
 
-MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm) : _cr(cr), _rmm(rmm) {
+MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm) : _cr(cr), _rmm(rmm), _rmm_sr(_rmm.newSubRef(this)) {
 	// Register WinToast App User Model
 	WinToastLib::WinToast::instance()->setAppName(L"Tomato");
 	const auto aumi = WinToastLib::WinToast::configureAUMI(L"green", L"solanaceae", L"solanaceae_message_n10n", L"20240517");
@@ -40,7 +40,7 @@ MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm) : _cr
 	if (!WinToastLib::WinToast::instance()->initialize()) {
 		std::wcout << L"Error, could not initialize the lib!" << std::endl;
 	} else {
-		_rmm.subscribe(this, RegistryMessageModel_Event::message_construct);
+		_rmm_sr.subscribe(RegistryMessageModel_Event::message_construct);
 	}
 }
 

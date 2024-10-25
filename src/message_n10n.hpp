@@ -5,6 +5,7 @@
 class MessageN10n : public RegistryMessageModelEventI {
 	Contact3Registry& _cr;
 	RegistryMessageModelI& _rmm;
+	RegistryMessageModelI::SubscriptionReference _rmm_sr;
 
 	public:
 		MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm);
