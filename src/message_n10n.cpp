@@ -24,6 +24,10 @@ class OurHandler : public WinToastLib::IWinToastHandler {
 			std::cout << "action called\n";
 		}
 
+		void toastActivated(const char* response) const override {
+			std::cout << "action called\n";
+		}
+
 		void toastDismissed(WinToastDismissalReason state) const override {
 		}
 
