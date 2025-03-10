@@ -1,5 +1,7 @@
 #include "./message_n10n.hpp"
 
+#include <solanaceae/contact/contact_store_i.hpp>
+
 #include <solanaceae/message3/components.hpp>
 #include <solanaceae/contact/components.hpp>
 
@@ -30,7 +32,7 @@ class OurHandler : public WinToastLib::IWinToastHandler {
 };
 
 
-MessageN10n::MessageN10n(Contact3Registry& cr, RegistryMessageModelI& rmm) : _cr(cr), _rmm(rmm), _rmm_sr(_rmm.newSubRef(this)) {
+MessageN10n::MessageN10n(ContactStore4I& cs, RegistryMessageModelI& rmm) : _cs(cs), _rmm(rmm), _rmm_sr(_rmm.newSubRef(this)) {
 	// Register WinToast App User Model
 	WinToastLib::WinToast::instance()->setAppName(L"Tomato");
 	const auto aumi = WinToastLib::WinToast::configureAUMI(L"green", L"solanaceae", L"solanaceae_message_n10n", L"20240517");
@@ -65,17 +67,19 @@ bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 
 	const auto sender_c = e.e.get<Message::Components::ContactFrom>().c;
 
-	if (_cr.all_of<Contact::Components::TagSelfStrong>(sender_c)) {
+	const auto& cr = _cs.registry();
+
+	if (cr.all_of<Contact::Components::TagSelfStrong>(sender_c)) {
 		return false;
 	}
-	if (!_cr.all_of<
+	if (!cr.all_of<
 		Contact::Components::Name
 	>(sender_c)) {
 		return false;
 	}
 
 	std::string title {
-		_cr.get<Contact::Components::Name>(sender_c).name
+		cr.get<Contact::Components::Name>(sender_c).name
 	};
 
 	if (title.empty()) {

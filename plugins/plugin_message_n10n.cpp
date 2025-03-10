@@ -3,6 +3,8 @@
 #include <entt/entt.hpp>
 #include <entt/fwd.hpp>
 
+#include <solanaceae/contact/contact_store_i.hpp>
+
 #include "message_n10n.hpp"
 
 #include <iostream>
@@ -29,7 +31,7 @@ SOLANA_PLUGIN_EXPORT uint32_t solana_plugin_start(struct SolanaAPI* solana_api) 
 	}
 
 	try {
-		auto* cr = PLUG_RESOLVE_INSTANCE_VERSIONED(Contact3Registry, "1");
+		auto* cs = PLUG_RESOLVE_INSTANCE(ContactStore4I);
 		auto* rmm = PLUG_RESOLVE_INSTANCE(RegistryMessageModelI);
 
 		// static store, could be anywhere tho
