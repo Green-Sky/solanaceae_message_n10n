@@ -36,7 +36,7 @@ SOLANA_PLUGIN_EXPORT uint32_t solana_plugin_start(struct SolanaAPI* solana_api) 
 
 		// static store, could be anywhere tho
 		// construct with fetched dependencies
-		g_mn10n = std::make_unique<MessageN10n>(*cr, *rmm);
+		g_mn10n = std::make_unique<MessageN10n>(*cs, *rmm);
 
 		// register types
 		PLUG_PROVIDE_INSTANCE(MessageN10n, plugin_name, g_mn10n.get());
