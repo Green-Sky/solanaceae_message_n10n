@@ -23,7 +23,8 @@ endif()
 if (NOT TARGET WinToast)
 	FetchContent_Declare(WinToast_ext
 		GIT_REPOSITORY https://github.com/mohabouje/WinToast.git
-		GIT_TAG master
+		GIT_TAG v1.3.1
 	)
 	FetchContent_MakeAvailable(WinToast_ext)
 endif()
+
