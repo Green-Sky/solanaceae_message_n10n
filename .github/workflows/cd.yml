@@ -17,7 +17,7 @@ jobs:
     runs-on: windows-2022
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     # setup vs env
     - uses: ilammy/msvc-dev-cmd@v1
@@ -48,7 +48,7 @@ jobs:
       run: |
         Compress-Archive -Path ${{github.workspace}}/build/bin/* -Destination ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-msvc-x86_64.zip
 
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@v6
       with:
         # TODO: simpler name?
         name: ${{ github.event.repository.name }}-${{ steps.tag.outputs.name }}-${{ runner.os }}-msvc-x86_64
@@ -70,7 +70,7 @@ jobs:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Determine tag name
       id: tag
