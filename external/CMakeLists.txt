@@ -20,11 +20,35 @@ if (NOT TARGET solanaceae_plugin)
 	FetchContent_MakeAvailable(solanaceae_plugin)
 endif()
 
-if (NOT TARGET WinToast)
-	FetchContent_Declare(WinToast_ext
-		GIT_REPOSITORY https://github.com/mohabouje/WinToast.git
-		GIT_TAG v1.3.1
+if (WIN32)
+	if (NOT TARGET WinToast)
+		FetchContent_Declare(WinToast_ext
+			GIT_REPOSITORY https://github.com/mohabouje/WinToast.git
+			GIT_TAG v1.3.1
+		)
+		FetchContent_MakeAvailable(WinToast_ext)
+	endif()
+elseif(APPLE)
+	message(FATAL_ERROR "Apple platforms is not supported")
+elseif(ANDROID)
+	message(FATAL_ERROR "Android is not supported")
+else() # assume dbus
+
+	# TODO: find dbus-cxx
+
+
+	# requires sigc/sigc++-3.0
+	# nixpkg libsigcxx30
+	# with tools requires expat, dbus, popt
+	set(ENABLE_TOOLS OFF CACHE INTERNAL "")
+	set(BUILD_TESTING OFF CACHE INTERNAL "")
+	FetchContent_Declare(dbus-cxx
+		GIT_REPOSITORY https://github.com/Green-Sky/dbus-cxx.git
+		GIT_TAG cmake_static
+		EXCLUDE_FROM_ALL
 	)
-	FetchContent_MakeAvailable(WinToast_ext)
+	FetchContent_MakeAvailable(dbus-cxx)
 endif()
+
+
 
