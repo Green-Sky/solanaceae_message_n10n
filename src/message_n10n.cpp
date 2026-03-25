@@ -51,6 +51,7 @@ MessageN10n::MessageN10n(ContactStore4I& cs, RegistryMessageModelI& rmm) : _cs(c
 }
 
 MessageN10n::~MessageN10n(void) {
+	WinToastLib::WinToast::instance()->clear();
 }
 
 bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
