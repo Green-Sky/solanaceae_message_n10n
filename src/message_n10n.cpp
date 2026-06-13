@@ -55,8 +55,6 @@ MessageN10n::~MessageN10n(void) {
 }
 
 bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
-	std::cout << "message constructed called\n";
-
 	if (!e.e.all_of<
 		Message::Components::MessageText,
 		Message::Components::ContactFrom,
@@ -91,24 +89,28 @@ bool MessageN10n::onEvent(const Message::Events::MessageConstruct& e) {
 		return false;
 	}
 
-	auto templ = WinToastLib::WinToastTemplate(WinToastLib::WinToastTemplate::Text02);
-	templ.setTextField(
-		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
-			title
-		),
-		WinToastLib::WinToastTemplate::FirstLine
-	);
-	templ.setTextField(
-		std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
-			text
-		),
-		WinToastLib::WinToastTemplate::SecondLine
-	);
+	try {
+		auto templ = WinToastLib::WinToastTemplate(WinToastLib::WinToastTemplate::Text02);
+		templ.setTextField(
+			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
+				title
+			),
+			WinToastLib::WinToastTemplate::FirstLine
+		);
+		templ.setTextField(
+			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>>{}.from_bytes(
+				text
+			),
+			WinToastLib::WinToastTemplate::SecondLine
+		);
 
-	WinToastLib::WinToast::WinToastError error;
-	const auto toast_id = WinToastLib::WinToast::instance()->showToast(templ, new OurHandler, &error);
-	if (toast_id < 0) {
-		std::wcout << L"Error: Could not launch your toast notification! " << error << std::endl;
+		WinToastLib::WinToast::WinToastError error;
+		const auto toast_id = WinToastLib::WinToast::instance()->showToast(templ, new OurHandler, &error);
+		if (toast_id < 0) {
+			std::wcout << L"Error: Could not launch your toast notification! " << error << std::endl;
+		}
+	} catch (...) {
+		return false;
 	}
 
 	return false;
